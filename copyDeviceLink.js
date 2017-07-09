@@ -13,7 +13,7 @@ const user_type = ["", "ClassUser", "Master", "NetUser", "Viewer", "Manager"];
 console.log(process.argv);
 var args = [];
 if (process.argv.length > 2)
-    args = process.argv.subarray(2);
+    args = process.argv.slice(2);
 
 var requestGetUrl = function (url, cb, eb) {
     var option = URL.parse(url);
