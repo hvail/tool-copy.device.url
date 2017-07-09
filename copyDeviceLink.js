@@ -1,9 +1,11 @@
 const URL = require('url');
 var http = require('http');
+
 const get_allUser_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account/count";
 const get_allUser_page_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account-device-link/page/UId/";
 // const get_allUser_page_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account/page/Id/";
 const page_count = 2000;
+var _page = 0;
 const response_header = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account-device-link/page/UId/";
 const request_header = "http://v3.local-manager-mongo.zh-cn.sky1088.com/custom/account-device-link/";
 const user_type = ["", "ClassUser", "Master", "NetUser", "Viewer", "Manager"];
@@ -79,7 +81,7 @@ var runData = function (data, i, cb) {
         return;
     }
     var obj = data[i];
-    obj._id = i++;
+    obj._id = _page * 2000 + i++;
     var objUrl = request_header + obj.SerialNumber;
     requestPostUrl(objUrl, obj, function () {
         runData(data, i, cb);
@@ -95,15 +97,21 @@ var runPage = function (page, count) {
     requestGetUrl(pageUrl, function (datajson) {
         var data = JSON.parse(datajson);
         runData(data, 0, function () {
+            _page = page;
             runPage(page, count);
         })
     });
 }
 
 getAccountCount(function (count) {
+    // console.time('100-elements');
+    // for (let i = 0; i < 100; i++) {
+    //     ;
+    // }
+    // console.timeEnd('100-elements');
+
     var page_c = count / page_count, i = 0;
     console.log(count + ":" + page_c);
     runPage(0, page_c);
-
 });
 
