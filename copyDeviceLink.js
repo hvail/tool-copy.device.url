@@ -68,23 +68,23 @@ var getAccountByPage = function (page, cb) {
     var url = get_allUser_page_url + page;
     requestGetUrl(url, function (data) {
         console.log(data);
-        cb && cb(JSON.parse(data));
+        cb && cb(JSON.parse(data), page);
     }, function (err) {
         console.log("getAccountByPage Err");
         console.log(err);
     });
 }
 
-var runData = function (data, i, cb) {
+var runData = function (data, page, i, cb) {
     if (i >= data.length) {
         cb && cb();
         return;
     }
     var obj = data[i];
-    obj._id = _page * 2000 + i++;
+    obj._id = page * 2000 + i++;
     var objUrl = request_header + obj.SerialNumber;
     requestPostUrl(objUrl, obj, function () {
-        runData(data, i, cb);
+        runData(data, page, i, cb);
     })
 }
 
@@ -96,10 +96,11 @@ var runPage = function (page, count) {
     var pageUrl = get_allUser_page_url + page++;
     requestGetUrl(pageUrl, function (datajson) {
         var data = JSON.parse(datajson);
-        runData(data, 0, function () {
-            _page = page;
-            runPage(page, count);
-        })
+        runData(data, page, 0, function () {
+            // _page = page;
+            // runPage(page, count);
+        });
+        runPage(page, count);
     });
 }
 
