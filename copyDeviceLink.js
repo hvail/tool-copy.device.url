@@ -1,0 +1,109 @@
+const URL = require('url');
+var http = require('http');
+const get_allUser_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account/count";
+const get_allUser_page_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account-device-link/page/UId/";
+// const get_allUser_page_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account/page/Id/";
+const page_count = 2000;
+const response_header = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account-device-link/page/UId/";
+const request_header = "http://v3.local-manager-mongo.zh-cn.sky1088.com/custom/account-device-link/";
+const user_type = ["", "ClassUser", "Master", "NetUser", "Viewer", "Manager"];
+
+var requestGetUrl = function (url, cb, eb) {
+    var option = URL.parse(url);
+    option.method = "GET";
+
+    var req = http.request(option, function (httpRes) {
+        var buffers = [];
+        httpRes.on('data', function (chunk) {
+            buffers.push(chunk);
+        });
+
+        httpRes.on('end', function (chunk) {
+            var wholeData = Buffer.concat(buffers);
+            var dataStr = wholeData.toString('utf8');
+            cb && cb(dataStr);
+        });
+    }).on('error', function (err) {
+        eb && eb(err);
+    });
+    req.end();
+}
+
+var requestPostUrl = function (url, data, cb, eb) {
+    var option = URL.parse(url);
+    option.method = "POST";
+    var _id = data._id;
+    var req = http.request(option, function (httpRes) {
+        console.log(" - " + _id + ' - STATUS: ' + httpRes.statusCode + ":" + option.path);
+        var buffers = [];
+        httpRes.on('data', function (chunk) {
+            buffers.push(chunk);
+        });
+
+        httpRes.on('end', function (chunk) {
+            var wholeData = Buffer.concat(buffers);
+            var dataStr = wholeData.toString('utf8');
+            cb && cb(dataStr);
+        });
+    }).on('error', function (err) {
+        eb && eb(err);
+    });
+    delete data._id;
+    req.write(JSON.stringify(data));
+    req.end();
+}
+
+var getAccountCount = function (cb) {
+    requestGetUrl(get_allUser_url, function (cc) {
+        cb && cb(cc);
+    }, function (err) {
+        console.log("getAccountCount Err");
+        console.log(err);
+    });
+}
+
+var getAccountByPage = function (page, cb) {
+    var url = get_allUser_page_url + page;
+    requestGetUrl(url, function (data) {
+        console.log(data);
+        cb && cb(JSON.parse(data));
+    }, function (err) {
+        console.log("getAccountByPage Err");
+        console.log(err);
+    });
+}
+
+var runData = function (data, i, cb) {
+    if (i >= data.length) {
+        cb && cb();
+        return;
+    }
+    var obj = data[i];
+    obj._id = i++;
+    var objUrl = request_header + obj.SerialNumber;
+    requestPostUrl(objUrl, obj, function () {
+        runData(data, i, cb);
+    })
+}
+
+var runPage = function (page, count) {
+    if (page > count) {
+        console.log('Run End');
+        return;
+    }
+    var pageUrl = get_allUser_page_url + page++;
+    requestGetUrl(pageUrl, function (datajson) {
+        var data = JSON.parse(datajson);
+        runData(data, 0, function () {
+            runPage(page, count);
+        })
+    });
+}
+
+getAccountCount(function (count) {
+    var page_c = count / page_count, i = 0;
+    console.log(count + ":" + page_c);
+    runPage(0, page_c);
+
+});
+
