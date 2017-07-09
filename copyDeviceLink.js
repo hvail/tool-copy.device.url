@@ -10,6 +10,11 @@ const response_header = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/
 const request_header = "http://v3.local-manager-mongo.zh-cn.sky1088.com/custom/account-device-link/";
 const user_type = ["", "ClassUser", "Master", "NetUser", "Viewer", "Manager"];
 
+console.log(process.argv);
+var args = [];
+if (process.argv.length > 2)
+    args = process.argv.subarray(2);
+
 var requestGetUrl = function (url, cb, eb) {
     var option = URL.parse(url);
     option.method = "GET";
@@ -89,7 +94,7 @@ var runData = function (data, page, i, cb) {
 }
 
 var runPage = function (page, count) {
-    if (page > count) {
+    if (page >= count) {
         console.log('Run End');
         return;
     }
@@ -110,9 +115,11 @@ getAccountCount(function (count) {
     //     ;
     // }
     // console.timeEnd('100-elements');
+    var page_c = Math.round(count / page_count);
+    var start = args.length >= 2 ? args[0] * 1 : 0,
+        end = args.length >= 2 ? args[1] * 1 : page_c;
 
-    var page_c = count / page_count, i = 0;
-    console.log(count + ":" + page_c);
-    runPage(0, page_c);
+    console.log(start + ":" + end);
+    runPage(start, end);
 });
 
