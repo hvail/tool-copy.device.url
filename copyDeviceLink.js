@@ -7,7 +7,7 @@ const get_allUser_page_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/cu
 const page_count = 2000;
 var _page = 0;
 var _index = 0;
-const response_header = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account-device-link/page/UId/";
+const response_header = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account-device-link/page/SerialNumber/";
 const request_header = "http://v3.local-manager-mongo.zh-cn.sky1088.com/custom/account-device-link/";
 const user_type = ["", "ClassUser", "Master", "NetUser", "Viewer", "Manager"];
 console.log(process.argv);
