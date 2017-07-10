@@ -58,6 +58,8 @@ var requestPostUrl = function (url, data, cb, eb) {
             cb && cb(dataStr);
         });
     }).on('error', function (err) {
+        console.log(err);
+        console.log("requestPostUrl err");
         eb && eb(err);
     });
     delete data._id;
