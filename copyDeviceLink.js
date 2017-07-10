@@ -41,8 +41,9 @@ var requestPostUrl = function (url, data, cb, eb) {
     option.method = "POST";
     var _id = data._id;
     var req = http.request(option, function (httpRes) {
+        _index++;
         if (_index % 20 == 0)
-            console.log(_index++ + " - " + _id + ' - STATUS: ' + httpRes.statusCode + ":" + option.path);
+            console.log(_index + " - " + _id + ' - STATUS: ' + httpRes.statusCode + ":" + option.path);
         // if (httpRes.statusCode == 204) {
         //     cb && cb();
         //     return;
@@ -98,7 +99,7 @@ var runData = function (data, page, i, cb) {
     var objUrl = request_header + obj.SerialNumber;
     requestPostUrl(objUrl, obj, function () {
         runData(data, page, i, cb);
-    })
+    });
 }
 
 var runPage = function (page, count) {
@@ -111,6 +112,7 @@ var runPage = function (page, count) {
         var data = JSON.parse(datajson);
         runData(data, page, 0, function () {
             // _page = page;
+            console.log('page is ' + page);
             runPage(page, count);
         });
         // runPage(page, count);
