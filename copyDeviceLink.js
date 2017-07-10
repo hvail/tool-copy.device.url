@@ -6,10 +6,10 @@ const get_allUser_page_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/cu
 // const get_allUser_page_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account/page/Id/";
 const page_count = 2000;
 var _page = 0;
+var _index = 0;
 const response_header = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account-device-link/page/UId/";
 const request_header = "http://v3.local-manager-mongo.zh-cn.sky1088.com/custom/account-device-link/";
 const user_type = ["", "ClassUser", "Master", "NetUser", "Viewer", "Manager"];
-
 console.log(process.argv);
 var args = [];
 if (process.argv.length > 2)
@@ -41,7 +41,7 @@ var requestPostUrl = function (url, data, cb, eb) {
     option.method = "POST";
     var _id = data._id;
     var req = http.request(option, function (httpRes) {
-        console.log(" - " + _id + ' - STATUS: ' + httpRes.statusCode + ":" + option.path);
+        console.log(_index++ + " - " + _id + ' - STATUS: ' + httpRes.statusCode + ":" + option.path);
         var buffers = [];
         httpRes.on('data', function (chunk) {
             buffers.push(chunk);
