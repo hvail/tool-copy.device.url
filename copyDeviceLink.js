@@ -41,7 +41,12 @@ var requestPostUrl = function (url, data, cb, eb) {
     option.method = "POST";
     var _id = data._id;
     var req = http.request(option, function (httpRes) {
-        console.log(_index++ + " - " + _id + ' - STATUS: ' + httpRes.statusCode + ":" + option.path);
+        if (_index % 20 == 0)
+            console.log(_index++ + " - " + _id + ' - STATUS: ' + httpRes.statusCode + ":" + option.path);
+        if (httpRes.statusCode == 204) {
+            cb && cb();
+            return;
+        }
         var buffers = [];
         httpRes.on('data', function (chunk) {
             buffers.push(chunk);
