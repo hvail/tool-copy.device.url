@@ -111,9 +111,9 @@ var runPage = function (page, count) {
         var data = JSON.parse(datajson);
         runData(data, page, 0, function () {
             // _page = page;
-            // runPage(page, count);
+            runPage(page, count);
         });
-        runPage(page, count);
+        // runPage(page, count);
     });
 }
 
