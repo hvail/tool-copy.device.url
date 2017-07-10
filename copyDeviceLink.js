@@ -1,7 +1,7 @@
 const URL = require('url');
 var http = require('http');
 
-const get_allUser_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account/count";
+const get_allUser_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account-device-link/count";
 const get_allUser_page_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account-device-link/page/UId/";
 // const get_allUser_page_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account/page/Id/";
 const page_count = 2000;
@@ -42,8 +42,8 @@ var requestPostUrl = function (url, data, cb, eb) {
     var _id = data._id;
     var req = http.request(option, function (httpRes) {
         _index++;
-        // if (_index % 20 == 0)
-        console.log(_index + " - " + _id + ' - STATUS: ' + httpRes.statusCode + ":" + option.path);
+        if (_index % 20 == 0)
+            console.log(_index + " - " + _id + ' - STATUS: ' + httpRes.statusCode + ":" + option.path);
         // if (httpRes.statusCode == 204) {
         //     cb && cb();
         //     return;
