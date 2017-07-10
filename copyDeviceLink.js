@@ -86,6 +86,7 @@ var runData = function (data, page, i, cb) {
         return;
     }
     var obj = data[i];
+    obj.UType = user_type[obj.UType];
     obj._id = page * 2000 + i++;
     var objUrl = request_header + obj.SerialNumber;
     requestPostUrl(objUrl, obj, function () {
