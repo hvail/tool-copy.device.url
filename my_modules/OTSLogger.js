@@ -15,7 +15,7 @@ var postLog = function (sn, req, ip, port) {
     };
 
     request.Post(post_url, opt, function (cc) {
-        console.log('request success ' + cc);
+        // console.log('request success ' + cc);
     }, function (err) {
         console.log('request fail ' + err);
     })
