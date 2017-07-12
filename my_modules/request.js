@@ -24,6 +24,9 @@ var requestGetUrl = function (url, cb, eb) {
 var requestPostUrl = function (url, data, cb, eb) {
     var option = URL.parse(url);
     option.method = "POST";
+    option.headers = {
+        'Content-Type': 'application/json',
+    }
     var _id = data._id;
     var req = http.request(option, function (httpRes) {
         _index++;

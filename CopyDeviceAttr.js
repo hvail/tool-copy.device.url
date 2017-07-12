@@ -1,4 +1,5 @@
 var req = require('./my_modules/request');
+var logger = require('./my_modules/OTSLogger');
 var iconv = require('iconv-lite');
 const get_count_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/device-attr/count";
 const get_page_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/device-attr/page/SerialNumber/";
@@ -6,6 +7,7 @@ const response_header = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/
 const request_header = "http://v3.local-manager-mongo.zh-cn.sky1088.com/custom/device-attr/";
 const page_count = 2000;
 var _page = 0;
+var _sn = "CopyDeviceAttr";
 
 var args = [];
 if (process.argv.length > 2) args = process.argv.slice(2);
@@ -72,6 +74,7 @@ var runData = function (data, page, i, cb) {
 var runPage = function (page, count, cb) {
     if (page >= count) {
         cb && cb();
+        logger.log(_sn, (_sn + ' : RunEnd ' + '@ ' + new Date().toLocaleTimeString()));
         console.log('Run End');
         return;
     }
@@ -80,7 +83,8 @@ var runPage = function (page, count, cb) {
     req.Get(pageUrl, function (datajson) {
         var data = JSON.parse(datajson);
         runData(data, page, 0, function () {
-            console.log('page is ' + page);
+            logger.log(_sn, (_sn + ' : page is ' + page + ' @ ' + new Date().toLocaleTimeString()));
+            console.log(_sn + ' : page is ' + page + ' @ ' + new Date().toLocaleTimeString());
             runPage(page, count, cb);
         });
     });
