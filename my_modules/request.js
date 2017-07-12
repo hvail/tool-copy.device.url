@@ -30,8 +30,8 @@ var requestPostUrl = function (url, data, cb, eb) {
     var _id = data._id;
     var req = http.request(option, function (httpRes) {
         _index++;
-        if (_index % 100 == 0)
-            console.log(_index + " - " + _id + ' - STATUS: ' + httpRes.statusCode + ":" + option.path);
+        // if (_index % 100 == 0)
+        //     console.log(_index + " - " + _id + ' - STATUS: ' + httpRes.statusCode + ":" + option.path);
         if (httpRes.statusCode == 204) {
             cb && cb();
             return;
