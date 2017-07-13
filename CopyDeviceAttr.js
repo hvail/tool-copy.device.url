@@ -24,7 +24,7 @@ var getAccountCount = function (cb) {
 var getAccountByPage = function (page, cb) {
     var url = get_allUser_page_url + page;
     req.Get(url, function (data) {
-        console.log(data);
+        // console.log(data);
         cb && cb(JSON.parse(data), page);
     }, function (err) {
         console.log("getAccountByPage Err");
@@ -38,22 +38,22 @@ var runData = function (data, page, i, cb) {
         return;
     }
     var obj = data[i];
-    if (!obj.DisplayName) {
+    var dn = obj.DisplayName;
+    if (!dn) {
         obj.DisplayName = obj.SerialNumber;
     }
-    else if (obj.DisplayName.indexOf("9460") >= 0) {
+    else if (dn.indexOf("9460") >= 0) {
         obj.IMSI = obj.DisplayName.slice(1);
-    } else if (obj.DisplayName.indexOf('0xFFFF') == 0) {
+        obj.DisplayName = obj.SerialNumber;
+    } else if (dn.indexOf('0xFFFF') == 0) {
         var __buff_str = obj.DisplayName.slice(10);
         var __buff = new Buffer(__buff_str, 'hex');
         var string = __buff.toString('utf16le');
-        // console.log(obj.DisplayName + ' ==> ' + string);
         obj.DisplayName = string;
-    } else if (/^\d+$/.test(obj.DisplayName) && obj.DisplayName[6] != 1 && obj.DisplayName.length > 10 && obj.DisplayName.length % 4 == 0) {
+    } else if (/^\d+$/.test(dn) && dn[6] != 1 && dn.length > 10 && dn.length % 4 == 0) {
         var __buff_str = obj.DisplayName;
         var __buff = new Buffer(__buff_str, 'hex');
         var string = __buff.toString('utf16le');
-        // console.log(obj.DisplayName + ' ==> ' + string);
         obj.DisplayName = string;
     }
 
@@ -62,11 +62,10 @@ var runData = function (data, page, i, cb) {
 //     console.log(obj.DisplayName);
 //     console.log(/^\d+$/.test(obj.DisplayName));
 // }
+
     obj._id = (page - 1) * 2000 + i++;
     var objUrl = request_header + obj.SerialNumber;
-    // runData(data, page, i, cb);
     req.Post(objUrl, obj, function () {
-        // console.log(obj);
         runData(data, page, i, cb);
     });
 }
