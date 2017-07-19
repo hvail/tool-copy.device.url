@@ -1,5 +1,5 @@
-#FROM node:6.11
-FROM java:8
+FROM node:6.11
+#FROM java:8
 WORKDIR /usr/local/run
 
 ADD Start.js            /usr/local/run/Start.js
