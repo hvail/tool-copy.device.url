@@ -1,9 +1,9 @@
 var req = require('./my_modules/request');
 var logger = require('./my_modules/OTSLogger');
-const get_allUser_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account-device-link/count";
-const get_allUser_page_url = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account-device-link/page/UId/";
-const response_header = "http://v3.local-manager-mssql.zh-cn.sky1088.com/custom/account-device-link/page/SerialNumber/";
-const request_header = "http://v3.local-manager-mongo.zh-cn.sky1088.com/custom/account-device-link/";
+const get_allUser_url = "http://v3.local-manager-mssql.en-us.sky1088.com/custom/account-device-link/count";
+const get_allUser_page_url = "http://v3.local-manager-mssql.en-us.sky1088.com/custom/account-device-link/page/UId/";
+const response_header = "http://v3.local-manager-mssql.en-us.sky1088.com/custom/account-device-link/page/SerialNumber/";
+const request_header = "http://v3.local-manager-mongo.en-us.sky1088.com/custom/account-device-link/";
 const page_count = 2000;
 var _page = 0;
 var _sn = "CopyDeviceLink";
@@ -70,6 +70,7 @@ var start = function (cb) {
         var start = args.length >= 2 ? args[0] * 1 : 0,
             end = args.length >= 2 ? args[1] * 1 : page_c;
 
+        console.log(count);
         console.log(start + ":" + end);
         runPage(start, end, cb);
     });

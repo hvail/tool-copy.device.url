@@ -1,5 +1,5 @@
 const request = require('./request');
-const area = process.env.DATAAREA || "zh-cn";
+const area = process.env.DATAAREA || "zh-cn-zcyx";
 const post_url = "http://v3.local-res-ots." + area + ".sky1088.com/netinfo";
 console.log(post_url);
 
