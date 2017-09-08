@@ -6,5 +6,7 @@ var deviceBind = require('./CopyDeviceLink');
 // }
 
 var start = function () {
-    deviceBind.start(deviceAttr.start);
+    deviceBind.start();
+    deviceAttr.start();
+    // deviceBind.start(deviceAttr.start);
 }();

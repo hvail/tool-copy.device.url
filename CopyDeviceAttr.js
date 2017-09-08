@@ -1,12 +1,13 @@
 var req = require('./my_modules/request');
 var logger = require('./my_modules/OTSLogger');
 var iconv = require('iconv-lite');
-const get_count_url = "http://v3.local-manager-mssql.zh-cn-zcyx.sky1088.com/custom/device-attr/count";
-const get_page_url = "http://v3.local-manager-mssql.zh-cn-zcyx.sky1088.com/custom/device-attr/page/SerialNumber/";
-const response_header = "http://v3.local-manager-mssql.zh-cn-zcyx.sky1088.com/custom/device-attr/page/SerialNumber/";
-const request_header = "http://v3.local-manager-mongo.zh-cn-zcyx.sky1088.com/custom/device-attr/";
+const get_count_url = "http://v3.local-manager-mssql.en-us.sky1088.com/custom/device-attr/count";
+const get_page_url = "http://v3.local-manager-mssql.en-us.sky1088.com/custom/device-attr/page/SerialNumber/";
+const response_header = "http://v3.local-manager-mssql.en-us.sky1088.com/custom/device-attr/page/SerialNumber/";
+const request_header = "http://v3.local-manager-mongo.en-us.sky1088.com/custom/device-attr/";
 const page_count = 2000;
 var _page = 0;
+var _total = 0, _index = 0;
 var _sn = "CopyDeviceAttr";
 
 var args = [];
@@ -66,6 +67,7 @@ var runData = function (data, page, i, cb) {
     obj._id = (page - 1) * 2000 + i++;
     var objUrl = request_header + obj.SerialNumber;
     req.Post(objUrl, obj, function () {
+        console.log("ATTR " + _index++ + " --> " + objUrl);
         runData(data, page, i, cb);
     });
 }
@@ -92,8 +94,11 @@ var runPage = function (page, count, cb) {
 var start = function (cb) {
     getAccountCount(function (count) {
         var page_c = Math.round(count / page_count);
+        _total = count;
         var start = args.length >= 2 ? args[0] * 1 : 0,
             end = args.length >= 2 ? args[1] * 1 : page_c;
+
+        console.log(count);
         console.log(start + ":" + end);
         runPage(start, end, cb);
     });
