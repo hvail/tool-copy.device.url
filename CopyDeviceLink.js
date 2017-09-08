@@ -42,6 +42,7 @@ var runData = function (data, page, i, cb) {
     obj._id = (page - 1) * 2000 + i++;
     var objUrl = request_header + obj.SerialNumber;
     req.Post(objUrl, obj, function () {
+        console.log(objUrl);
         runData(data, page, i, cb);
     });
 }
