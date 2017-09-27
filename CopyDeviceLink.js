@@ -76,9 +76,7 @@ var start = function (cb) {
 
         console.log(count);
         console.log(start + ":" + end);
-        runPage(start, half, cb);
-        runPage(half, half + half, cb);
-        runPage(half + half, end, cb);
+        runPage(start, end, cb);
     });
 }
 
