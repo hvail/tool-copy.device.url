@@ -60,7 +60,7 @@ var runPage = function (page, count, cb) {
     req.Get(pageUrl, function (datajson) {
         var data = JSON.parse(datajson);
         runData(data, page, 0, function () {
-            logger.log(_sn, (_sn + ' : page is ' + page + ' @ ' + new Date().toLocaleTimeString()));
+            // logger.log(_sn, (_sn + ' : page is ' + page + ' @ ' + new Date().toLocaleTimeString()));
             console.log(_sn + ' : page is ' + page + ' @ ' + new Date().toLocaleTimeString());
             runPage(page, count, cb);
         });
@@ -71,11 +71,14 @@ var start = function (cb) {
         var page_c = Math.round(count / page_count);
         _total = count;
         var start = args.length >= 2 ? args[0] * 1 : 0,
-            end = args.length >= 2 ? args[1] * 1 : page_c;
+            end = args.length >= 2 ? args[1] * 1 : page_c,
+            half = Math.round(end / 3);
 
         console.log(count);
         console.log(start + ":" + end);
-        runPage(start, end, cb);
+        runPage(start, half, cb);
+        runPage(half, half + half, cb);
+        runPage(half + half, end, cb);
     });
 }
 
